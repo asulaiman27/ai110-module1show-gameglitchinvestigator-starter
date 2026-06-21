@@ -8,15 +8,19 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
 
+  - Hints are backwards - the UI shows a "go higher" hint then the real number is actually below the guess and "go lower" when the real number is actually above the guess
+  - The "New Game" button is buggy - it sometimes doesn't register and requires a websitre restart to actually fix the game
+  - When I switch difficulties, only the guess count gets updated on the main UI, not the range of numbers. Easy is supposed to show 1-20, but it only shows 1-100 because it doesn't update from the normal
+
 **Bug Reproduction Log**
 
 Document at least 3 bugs you found. Add rows as needed.
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
 |-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+|Guess of 1|Go HIGHER|go LOWER|none|
+|"New Game" button pressed |UI reset with a new game and number|New game required ntoifcation doesn't dissapear, and button does not work|none|
+|Changing difficult to "Easy" |Range changes from 1-20 with 6 guesses|Range stays the same but guesses changes to 6|none|
 
 ---
 
