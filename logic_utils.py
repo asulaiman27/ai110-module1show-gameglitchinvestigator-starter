@@ -1,3 +1,6 @@
+import random
+
+
 def get_range_for_difficulty(difficulty: str):
     """Return (low, high) inclusive range for a given difficulty."""
     if difficulty == "Easy":
@@ -47,6 +50,8 @@ def check_guess(guess, secret):
 
 def get_hint_message(outcome: str):
     """Return the player-facing hint message for a given outcome."""
+    # FIX: Higher/Lower hints were flipped (I spotted it playing the UI;
+    # corrected the directions with Claude in agent mode).
     if outcome == "Win":
         return "🎉 Correct!"
     if outcome == "Too High":
@@ -56,20 +61,31 @@ def get_hint_message(outcome: str):
     return ""
 
 
+def new_game_state(low: int, high: int):
+    """Return a fresh game-state dict for a new game within [low, high]."""
+    # FIX: "New Game" only reset some fields, so a finished game stayed
+    # "won"/"lost" and the secret ignored the difficulty range. Built this
+    # single reset helper with Claude in agent mode so every field resets.
+    return {
+        "secret": random.randint(low, high),
+        "attempts": 1,
+        # FIX: score now starts at 100 instead of 0. Claude, agent mode.
+        "score": 100,
+        "status": "playing",
+        "history": [],
+    }
+
+
 def update_score(current_score: int, outcome: str, attempt_number: int):
     """Update score based on outcome and attempt number."""
+    # FIX: dropped the win bonus — winning no longer adds points, the player
+    # simply keeps their remaining score. Claude, agent mode.
     if outcome == "Win":
-        points = 100 - 10 * (attempt_number + 1)
-        if points < 10:
-            points = 10
-        return current_score + points
+        return current_score
 
-    if outcome == "Too High":
-        if attempt_number % 2 == 0:
-            return current_score + 5
-        return current_score - 5
-
-    if outcome == "Too Low":
-        return current_score - 5
+    # FIX: every incorrect guess (too high or too low) now costs 10 points.
+    # Claude, agent mode.
+    if outcome in ("Too High", "Too Low"):
+        return current_score - 10
 
     return current_score
